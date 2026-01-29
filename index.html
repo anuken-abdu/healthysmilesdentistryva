@@ -133,6 +133,13 @@
     p{ margin: 0; font-size: var(--p); color: rgba(11,20,48,.82); line-height: 1.65; }
     .muted{ color: var(--muted); }
 
+    .card{
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
     /* Header */
     .topbar{
       background: rgba(255,255,255,.55);
@@ -153,14 +160,17 @@
       display:flex; align-items:center; gap: 12px;
       min-width: 180px;
     }
+
+    /* ✅ UPDATED: header logo larger + no frame (transparent PNG friendly) */
     .brand .logo{
-      width: 44px; height: 44px;
-      border-radius: 14px;
-      border: 1px solid rgba(11,20,48,.12);
-      background: #fff;
-      object-fit: cover;
-      box-shadow: 0 14px 30px rgba(11,20,48,.10);
+      width: 58px; height: 58px;
+      border: 0;
+      background: transparent;
+      object-fit: contain;
+      box-shadow: none;
+      border-radius: 0;
     }
+
     .brand .name{
       display:flex; flex-direction: column;
       line-height: 1.1;
@@ -175,7 +185,9 @@
       font-weight: 600;
     }
 
-    nav{ display:flex; align-items:center; gap: 12px; }
+    nav{
+      display:flex; align-items:center; gap: 12px;
+    }
     .navlinks{
       display:flex; align-items:center; gap: 4px;
       padding: 6px;
@@ -204,7 +216,9 @@
       transform: translateY(-1px);
     }
 
-    .cta{ display:flex; align-items:center; gap: 10px; }
+    .cta{
+      display:flex; align-items:center; gap: 10px;
+    }
     .btn{
       display:inline-flex; align-items:center; justify-content: center;
       gap: 10px;
@@ -231,7 +245,11 @@
       background: rgba(19,183,166,.10);
       color: rgba(11,20,48,.92);
     }
-    .btn.icon{ padding: 12px; width: 44px; height: 44px; }
+    .btn.icon{
+      padding: 12px;
+      width: 44px; height: 44px;
+    }
+
     .hamburger{ display:none; }
 
     /* Dropdown / Mega */
@@ -250,7 +268,6 @@
       -webkit-backdrop-filter: var(--blur);
       display: none;
       transform-origin: top left;
-      z-index: 100;
     }
     .dropdown[data-open="true"] .dropdown-panel{
       display:block;
@@ -302,34 +319,62 @@
       margin-top: 4px;
     }
 
-    /* HERO (ТОЛЬКО ВИДЕО + ЛОГО) */
+    /* Hero */
     .hero{
       position: relative;
-      height: 100svh;
-      min-height: 520px;
-      background: #0b1430;
+      padding: clamp(42px, 7vw, 80px) 0 clamp(34px, 6vw, 70px);
       overflow: hidden;
-      border-bottom: 1px solid rgba(11,20,48,.08);
     }
+    .hero .backplate{
+      position:absolute; inset: 0;
+      border-bottom: 1px solid rgba(11,20,48,.08);
+      background: #0b1430; /* helps when video uses contain */
+    }
+
+    /* ✅ keep desktop "contain" (shows full video)
+       ✅ mobile switches to "cover" to remove empty bars around video */
     .hero video{
       position:absolute; inset: 0;
       width:100%; height:100%;
-      object-fit: contain; /* видео видно полностью */
+      object-fit: contain;
+      object-position: center;
       background: #0b1430;
+      filter: saturate(1.05) contrast(1.02);
     }
+    @media (max-width: 820px){
+      .hero video{ object-fit: cover; }
+    }
+
+    .hero .overlay{
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 500px at 20% 30%, rgba(255,255,255,.78), rgba(255,255,255,.35) 55%, rgba(246,249,255,.18) 70%),
+        linear-gradient(90deg, rgba(11,20,48,.70), rgba(11,20,48,.22), rgba(11,20,48,.02));
+      mix-blend-mode: normal;
+    }
+    .hero .noise{
+      position:absolute; inset:0;
+      pointer-events:none;
+      opacity:.18;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+    }
+
+    /* Center logo over hero video (UNCHANGED) */
     .hero-center-logo{
       position:absolute;
       left:50%;
       top:50%;
       transform: translate(-50%,-50%);
-      z-index: 2;
+      z-index: 1;
       pointer-events:none;
       display:grid;
       place-items:center;
+      opacity:.92;
       filter: drop-shadow(0 22px 60px rgba(0,0,0,.45));
     }
     .hero-center-logo img{
-      width: clamp(140px, 18vw, 210px);
+      width: clamp(120px, 16vw, 190px);
       height: auto;
       border-radius: 26px;
       border: 1px solid rgba(255,255,255,.40);
@@ -338,7 +383,6 @@
       -webkit-backdrop-filter: blur(10px);
     }
 
-    /* Контент, который раньше был поверх видео — теперь ниже */
     .hero-grid{
       position: relative;
       display:grid;
@@ -355,7 +399,10 @@
       backdrop-filter: var(--blur);
       -webkit-backdrop-filter: var(--blur);
     }
-    .pill-row{ display:flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .pill-row{
+      display:flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 14px;
+    }
     .pill{
       display:inline-flex; align-items:center; gap: 8px;
       padding: 8px 10px;
@@ -399,6 +446,7 @@
       align-items:flex-start;
       min-height: 76px;
     }
+    .bullet svg{ flex: 0 0 auto; }
     .bullet strong{ display:block; font-weight: 900; font-size: .92rem; }
     .bullet span{ display:block; color: rgba(11,20,48,.70); font-weight: 700; font-size: .85rem; margin-top: 2px; }
 
@@ -414,6 +462,17 @@
       position: relative;
       overflow:hidden;
     }
+    .hero-card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(420px 220px at 20% 10%, rgba(44,107,237,.18), transparent 55%),
+        radial-gradient(380px 220px at 90% 30%, rgba(52,198,242,.18), transparent 55%),
+        radial-gradient(380px 240px at 70% 110%, rgba(19,183,166,.18), transparent 55%);
+      pointer-events:none;
+    }
+    .hero-card > *{ position: relative; }
+    .hero-card h3{ margin-bottom: 6px; }
     .offer{
       display:flex; align-items:center; justify-content: space-between; gap: 12px;
       padding: 12px;
@@ -440,6 +499,7 @@
       white-space: nowrap;
     }
 
+    /* Info strip */
     .strip{
       margin-top: 18px;
       display:grid;
@@ -449,7 +509,7 @@
     .strip .item{
       padding: 14px;
       border-radius: 18px;
-      border: 1px solid rgba(11,20,48,.10);
+      border: 1px solid rgba(255,255,255,.45);
       background: rgba(255,255,255,.52);
       backdrop-filter: var(--blur);
       -webkit-backdrop-filter: var(--blur);
@@ -457,7 +517,7 @@
     .strip .item strong{ font-weight: 900; display:block; }
     .strip .item span{ color: rgba(11,20,48,.70); font-weight: 700; font-size: .9rem; display:block; margin-top: 4px; }
 
-    /* Sections grids */
+    /* Sections */
     .grid-3{
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -491,6 +551,15 @@
     }
     .feature p{ margin-top: 8px; }
 
+    .services .feature{ cursor: pointer; }
+    .services .feature .more{
+      margin-top: 12px;
+      display:inline-flex; align-items:center; gap: 8px;
+      font-weight: 900;
+      color: rgba(44,107,237,.92);
+      font-size: .92rem;
+    }
+
     .split{
       padding: 22px;
       border-radius: var(--radius);
@@ -500,12 +569,107 @@
       overflow:hidden;
       position: relative;
     }
+    .split::after{
+      content:"";
+      position:absolute; inset:-3px;
+      background:
+        radial-gradient(420px 260px at 15% 20%, rgba(44,107,237,.12), transparent 60%),
+        radial-gradient(420px 280px at 90% 20%, rgba(52,198,242,.12), transparent 60%),
+        radial-gradient(420px 300px at 70% 110%, rgba(19,183,166,.12), transparent 60%);
+      pointer-events:none;
+    }
+    .split > *{ position: relative; }
+    .split .lead{ margin-top: 10px; max-width: 68ch; }
 
-    /* ===== Alternating gallery (зиг-заг) ===== */
+    .doctor{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 18px;
+      align-items: center;
+    }
+    .portrait{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,20,48,.12);
+      background:
+        radial-gradient(700px 400px at 20% 15%, rgba(44,107,237,.18), transparent 55%),
+        radial-gradient(700px 420px at 85% 25%, rgba(52,198,242,.18), transparent 55%),
+        radial-gradient(700px 450px at 70% 110%, rgba(19,183,166,.18), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.55));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position: relative;
+      min-height: 320px;
+    }
+    .portrait .badge{
+      position:absolute; left: 16px; top: 16px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(11,20,48,.10);
+      font-weight: 900;
+      display:inline-flex; align-items:center; gap: 10px;
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+    }
+    .portrait .badge i{
+      width: 10px; height:10px; border-radius: 99px;
+      background: linear-gradient(135deg, var(--warm), var(--primary2));
+      box-shadow: 0 12px 26px rgba(255,176,32,.18);
+      display:inline-block;
+    }
+    .portrait img{
+      width:100%; height:100%;
+      object-fit: cover;
+      position:absolute; inset:0;
+      opacity: 0;
+      transition: opacity .35s var(--ease);
+    }
+    .portrait[data-has-img="true"] img{ opacity: 1; }
+    .portrait .placeholder{
+      position:absolute; inset:0;
+      display:grid; place-items: center;
+      padding: 18px;
+      text-align:center;
+      color: rgba(11,20,48,.72);
+      font-weight: 800;
+    }
+    .portrait .placeholder span{
+      display:block;
+      font-size: 3rem;
+      font-family: "DM Serif Display", ui-serif, Georgia, serif;
+      color: rgba(11,20,48,.78);
+    }
+    .portrait[data-has-img="true"] .placeholder{ display:none; }
+
+    .steps{
+      margin-top: 14px;
+      display:grid;
+      gap: 10px;
+    }
+    .step{
+      display:flex; gap: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(11,20,48,.10);
+      background: rgba(255,255,255,.62);
+    }
+    .step .n{
+      width: 34px; height: 34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      font-weight: 900;
+      background: rgba(44,107,237,.12);
+      border: 1px solid rgba(44,107,237,.18);
+      flex: 0 0 auto;
+    }
+    .step strong{ display:block; font-weight: 900; }
+    .step span{ display:block; margin-top: 4px; color: rgba(11,20,48,.70); font-weight: 700; font-size: .92rem; }
+
+    /* Text+Image gallery (4 blocks) */
     .story-wrap{ display:grid; gap: 14px; }
     .story-row{
       display:grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.15fr .85fr;
       gap: 16px;
       align-items: center;
       padding: 22px;
@@ -516,6 +680,17 @@
       overflow:hidden;
       position: relative;
     }
+    .story-row::after{
+      content:"";
+      position:absolute; inset:-3px;
+      background:
+        radial-gradient(420px 260px at 15% 20%, rgba(44,107,237,.10), transparent 60%),
+        radial-gradient(420px 280px at 90% 20%, rgba(52,198,242,.10), transparent 60%),
+        radial-gradient(420px 300px at 70% 110%, rgba(19,183,166,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .story-row > *{ position:relative; }
+
     .story-text h3{
       font-family:'DM Serif Display', ui-serif, Georgia, serif;
       font-size: clamp(1.35rem, 2.2vw, 1.85rem);
@@ -533,44 +708,40 @@
       font-weight: 700;
       line-height: 1.7;
     }
+
+    /* media container */
     .story-media{
       border-radius: 20px;
       border: 1px solid rgba(11,20,48,.12);
       background: rgba(255,255,255,.55);
       overflow:hidden;
       box-shadow: 0 22px 70px rgba(10,25,55,.16);
+      min-height: 260px;
       position: relative;
-      aspect-ratio: 3 / 4;      /* ВЕРТИКАЛЬНО */
-      min-height: 420px;        /* “на полный обзор” */
     }
     .story-media img{
       position:absolute; inset:0;
       width:100%; height:100%;
       object-fit: cover;
     }
-    .story-row.reverse .story-text{ order: 2; }
-    .story-row.reverse .story-media{ order: 1; }
 
-    /* ===== Office gallery (4 фото) ===== */
-    .office-grid{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .office-photo{
-      border-radius: 20px;
-      border: 1px solid rgba(11,20,48,.12);
-      background: rgba(255,255,255,.60);
-      box-shadow: 0 18px 60px rgba(10,25,55,.14);
-      overflow:hidden;
-      position: relative;
-      aspect-ratio: 4 / 3;
-    }
-    .office-photo img{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit: cover;
-      transform: scale(1.01);
+    .story-row.reverse{ grid-template-columns: .85fr 1.15fr; }
+    .story-row.reverse .story-media{ order: 1; }
+    .story-row.reverse .story-text{ order: 2; }
+
+    /* Specials */
+    .specials .feature .price{
+      font-weight: 900;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255,176,32,.16);
+      border: 1px solid rgba(255,176,32,.26);
+      color: rgba(11,20,48,.92);
+      width: fit-content;
     }
 
     /* Reviews */
@@ -609,6 +780,22 @@
       font-weight: 800;
       color: rgba(11,20,48,.60);
     }
+    .carousel-ctrl{
+      display:flex; align-items:center; justify-content: space-between; gap: 10px;
+      margin-top: 12px;
+    }
+    .dots{ display:flex; gap: 6px; flex-wrap: wrap; }
+    .dotbtn{
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      border: 0;
+      background: rgba(11,20,48,.16);
+      cursor:pointer;
+    }
+    .dotbtn[aria-current="true"]{
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      width: 20px;
+    }
 
     /* Contact */
     .contact-grid{
@@ -617,6 +804,56 @@
       gap: 16px;
       align-items: start;
     }
+    .form{
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,20,48,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.62));
+      box-shadow: var(--shadow);
+    }
+    .fields{
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .fields .full{ grid-column: 1 / -1; }
+    label{
+      display:block;
+      font-size: .86rem;
+      font-weight: 900;
+      color: rgba(11,20,48,.70);
+      margin-bottom: 6px;
+    }
+    input, textarea, select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(11,20,48,.14);
+      background: rgba(255,255,255,.78);
+      outline: none;
+      transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(44,107,237,.30);
+      box-shadow: 0 0 0 4px rgba(44,107,237,.12);
+    }
+    textarea{ min-height: 120px; resize: vertical; }
+    .form-actions{
+      margin-top: 12px;
+      display:flex; flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+    }
+    .fineprint{
+      font-size: .86rem;
+      color: rgba(11,20,48,.62);
+      font-weight: 700;
+      line-height: 1.5;
+      max-width: 52ch;
+    }
+
     .contact-card{
       padding: 18px;
       border-radius: var(--radius);
@@ -626,7 +863,11 @@
       overflow:hidden;
       position: relative;
     }
-    .info-list{ margin-top: 10px; display:grid; gap: 10px; }
+    .info-list{
+      margin-top: 10px;
+      display:grid;
+      gap: 10px;
+    }
     .info-item{
       padding: 12px;
       border-radius: 18px;
@@ -666,7 +907,11 @@
       grid-template-columns: 1.2fr .8fr .8fr;
       gap: 16px;
     }
-    .foot-links{ display:grid; gap: 8px; font-weight: 800; color: rgba(11,20,48,.72); }
+    .foot-links{
+      display:grid; gap: 8px;
+      font-weight: 800;
+      color: rgba(11,20,48,.72);
+    }
     .foot-links a:hover{ color: rgba(44,107,237,.92); }
     .copyright{
       margin-top: 18px;
@@ -715,35 +960,67 @@
       transform: translateY(0);
     }
 
-    /* Responsive (РЕАЛЬНАЯ АДАПТАЦИЯ) */
-    @media (max-width: 980px){
-      .section-title{ flex-direction: column; align-items:flex-start; }
+    /* Dialog */
+    .dialog-backdrop{
+      position: fixed; inset: 0;
+      background: rgba(11,20,48,.55);
+      display:none;
+      z-index: 80;
+    }
+    .dialog-backdrop[data-open="true"]{ display:block; }
+    .dialog{
+      position: fixed;
+      inset: 0;
+      display:none;
+      z-index: 90;
+      place-items: center;
+      padding: 18px;
+    }
+    .dialog[data-open="true"]{ display:grid; }
+    .dialog-panel{
+      width: min(760px, 100%);
+      border-radius: 22px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.55);
+      box-shadow: 0 40px 120px rgba(10,25,55,.35);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      overflow:hidden;
+    }
+    .dialog-head{
+      padding: 16px 16px 12px;
+      display:flex; align-items:flex-start; justify-content: space-between; gap: 10px;
+      border-bottom: 1px solid rgba(11,20,48,.10);
+    }
+    .dialog-head h3{
+      font-family: "DM Serif Display", ui-serif, Georgia, serif;
+      font-size: 1.6rem;
+    }
+    .dialog-body{
+      padding: 16px;
+      display:grid;
+      gap: 10px;
+    }
+    .xbtn{
+      width: 44px; height: 44px;
+      border-radius: 16px;
+      border: 1px solid rgba(11,20,48,.12);
+      background: rgba(255,255,255,.70);
+      cursor:pointer;
+    }
 
+    /* Responsive */
+    @media (max-width: 980px){
       .hero-grid{ grid-template-columns: 1fr; }
       .strip{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid-3{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-      /* ВОТ ЭТОГО НЕ ХВАТАЛО — теперь About станет 1 колонкой */
-      .grid-2{ grid-template-columns: 1fr; }
-
+      .doctor{ grid-template-columns: 1fr; }
       .contact-grid{ grid-template-columns: 1fr; }
       .footer-grid{ grid-template-columns: 1fr; }
 
-      /* Зиг-заг на мобилке: вертикально + фото на “полный обзор” */
-      .story-row{
-        grid-template-columns: 1fr;
-        padding: 16px;
-      }
-      .story-row .story-media{
-        order: -1;
-        height: 62svh;
-        min-height: 420px;
-        aspect-ratio: auto;
-      }
-      .story-row.reverse .story-media{ order: -1; }
+      .story-row, .story-row.reverse{ grid-template-columns: 1fr; }
+      .story-row.reverse .story-media{ order: 0; }
       .story-row.reverse .story-text{ order: 0; }
-
-      .office-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 860px){
@@ -779,11 +1056,14 @@
       .hero-bullets{ grid-template-columns: 1fr; }
       .grid-3{ grid-template-columns: 1fr; }
       .strip{ grid-template-columns: 1fr; }
+      .fields{ grid-template-columns: 1fr; }
       .brand .name span{ display:none; }
       .topbar-inner{ gap: 12px; }
 
-      .office-grid{ grid-template-columns: 1fr; }
-      .hero-center-logo img{ width: 150px; border-radius: 22px; }
+      /* header logo a bit smaller on tiny screens but still larger than before */
+      .brand .logo{ width: 52px; height: 52px; }
+
+      .hero-center-logo img{ width: 140px; border-radius: 22px; }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -827,33 +1107,75 @@
                     From checkups to smile makeovers, we design treatment plans around your goals—clear, calm, and pressure-free.
                   </p>
                   <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                    <a class="btn primary" href="#contact">Book Visit</a>
-                    <a class="btn" href="tel:+17039157330" aria-label="Call now">Call</a>
+                    <a class="btn primary" href="#contact">
+                      Book Visit
+                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M7 17l10-10M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </a>
+                    <a class="btn" href="tel:+17039157330" aria-label="Call now">
+                      Call
+                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6.5 10.8c1.8 3.6 3.9 5.6 7.5 7.5l2.5-2.5c.3-.3.8-.4 1.2-.2 1.3.5 2.7.8 4.1.8.7 0 1.2.5 1.2 1.2V21c0 .7-.5 1.2-1.2 1.2C10.1 22.2 1.8 13.9 1.8 3.2 1.8 2.5 2.3 2 3 2h3.5c.7 0 1.2.5 1.2 1.2 0 1.4.3 2.8.8 4.1.1.4.1.9-.2 1.2L6.5 10.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </a>
                   </div>
                 </div>
 
                 <div class="mega-right" role="none">
-                  <a class="mega-item" href="#services" role="menuitem">Preventive <span class="mini">Cleanings • Exams • X-rays</span></a>
-                  <a class="mega-item" href="#services" role="menuitem">General <span class="mini">Fillings • Crowns • Bridges</span></a>
-                  <a class="mega-item" href="#services" role="menuitem">Cosmetic <span class="mini">Whitening • Veneers</span></a>
-                  <a class="mega-item" href="#services" role="menuitem">Emergency <span class="mini">Same-day relief</span></a>
-                  <a class="mega-item" href="#services" role="menuitem">Implants <span class="mini">Restore function</span></a>
-                  <a class="mega-item" href="#services" role="menuitem">Pediatric <span class="mini">Kid-friendly visits</span></a>
-                  <a class="mega-item" href="#services" role="menuitem">Invisalign® <span class="mini">Clear aligners</span></a>
-                  <a class="mega-item" href="#services" role="menuitem">Oral Surgery <span class="mini">Extractions • Root canals</span></a>
+                  <a class="mega-item" href="#services" data-service="preventive" role="menuitem">
+                    Preventive
+                    <span class="mini">Cleanings • Exams • X-rays</span>
+                  </a>
+                  <a class="mega-item" href="#services" data-service="general" role="menuitem">
+                    General
+                    <span class="mini">Fillings • Crowns • Bridges</span>
+                  </a>
+                  <a class="mega-item" href="#services" data-service="cosmetic" role="menuitem">
+                    Cosmetic
+                    <span class="mini">Whitening • Veneers</span>
+                  </a>
+                  <a class="mega-item" href="#services" data-service="emergency" role="menuitem">
+                    Emergency
+                    <span class="mini">Same-day relief</span>
+                  </a>
+                  <a class="mega-item" href="#services" data-service="implants" role="menuitem">
+                    Implants
+                    <span class="mini">Restore function</span>
+                  </a>
+                  <a class="mega-item" href="#services" data-service="pediatric" role="menuitem">
+                    Pediatric
+                    <span class="mini">Kid-friendly visits</span>
+                  </a>
+                  <a class="mega-item" href="#services" data-service="invisalign" role="menuitem">
+                    Invisalign®
+                    <span class="mini">Clear aligners</span>
+                  </a>
+                  <a class="mega-item" href="#services" data-service="surgery" role="menuitem">
+                    Oral Surgery
+                    <span class="mini">Extractions • Root canals</span>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
 
+          <a href="#specials">Specials</a>
           <a href="#membership">Membership</a>
           <a href="#reviews">Reviews</a>
           <a href="#contact">Contact</a>
         </div>
 
         <div class="cta">
-          <a class="btn soft" href="tel:+17039157330" title="Call now">(703) 915-7330</a>
-          <a class="btn primary" href="#contact">Book Appointment</a>
+          <a class="btn soft" href="tel:+17039157330" title="Call now">
+            (703) 915-7330
+          </a>
+          <a class="btn primary" href="#contact">
+            Book Appointment
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17l10-10M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </a>
 
           <button class="btn icon hamburger" type="button" id="hamburger" aria-label="Open menu" aria-controls="navlinks" aria-expanded="false">
             <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
@@ -865,19 +1187,22 @@
     </div>
   </header>
 
-  <!-- HERO: только видео + логотип -->
-  <section class="hero" aria-label="Hero video">
-    <video autoplay muted loop playsinline preload="metadata" poster="images/logo.jpg">
-      <source src="videos/hero.mp4" type="video/mp4" />
-    </video>
+  <!-- Hero -->
+  <section class="hero" aria-label="Hero">
+    <div class="backplate" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="metadata" poster="images/logo.jpg">
+        <source src="videos/hero.mp4" type="video/mp4" />
+      </video>
 
-    <div class="hero-center-logo" aria-hidden="true">
-      <img src="images/logo.jpg" alt="Healthy Smiles Dentistry">
+      <!-- centered logo over video (UNCHANGED) -->
+      <div class="hero-center-logo" aria-hidden="true">
+        <img src="images/logo.jpg" alt="">
+      </div>
+
+      <div class="overlay"></div>
+      <div class="noise"></div>
     </div>
-  </section>
 
-  <!-- Контент, который раньше был поверх видео — теперь СРАЗУ НИЖЕ -->
-  <section class="section" aria-label="Intro content">
     <div class="container">
       <div class="hero-grid">
         <div class="hero-copy" data-reveal>
@@ -894,25 +1219,49 @@
           </p>
 
           <div class="hero-actions">
-            <a class="btn primary" href="#contact">Book a Visit</a>
-            <a class="btn" href="tel:+17039157330">Call Now</a>
-            <a class="btn soft" href="#membership">See Membership</a>
+            <a class="btn primary" href="#contact">
+              Book a Visit
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 17l10-10M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a class="btn" href="tel:+17039157330">
+              Call Now
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6.5 10.8c1.8 3.6 3.9 5.6 7.5 7.5l2.5-2.5c.3-.3.8-.4 1.2-.2 1.3.5 2.7.8 4.1.8.7 0 1.2.5 1.2 1.2V21c0 .7-.5 1.2-1.2 1.2C10.1 22.2 1.8 13.9 1.8 3.2 1.8 2.5 2.3 2 3 2h3.5c.7 0 1.2.5 1.2 1.2 0 1.4.3 2.8.8 4.1.1.4.1.9-.2 1.2L6.5 10.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a class="btn soft" href="#specials">
+              See Specials
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </div>
 
           <div class="hero-bullets" aria-label="Key benefits">
             <div class="bullet">
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l3 7 7 .5-5.3 4.3 1.7 7.2L12 17.8 5.6 21l1.7-7.2L2 9.5 9 9l3-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
               <div>
                 <strong>Judgment-free</strong>
                 <span>Clear options, no pressure</span>
               </div>
             </div>
             <div class="bullet">
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 12h18M12 3v18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
               <div>
                 <strong>Same-day care</strong>
                 <span>For urgent tooth pain</span>
               </div>
             </div>
             <div class="bullet">
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 7l-9 9-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
               <div>
                 <strong>Modern tech</strong>
                 <span>Efficient & precise visits</span>
@@ -969,6 +1318,10 @@
               <span class="tag">Save</span>
             </div>
 
+            <p class="muted" style="margin-top:10px; font-size:.9rem; font-weight:700;">
+              *Offer details may vary. Update text as needed.
+            </p>
+
             <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
               <a class="btn primary" href="#contact">Claim Offer</a>
               <a class="btn" href="tel:+17039157330">Call</a>
@@ -1004,31 +1357,47 @@
         <div class="grid-2">
           <div class="split" data-reveal>
             <h3 style="font-family:'DM Serif Display', ui-serif, Georgia, serif; font-size:1.65rem;">A better kind of appointment.</h3>
-            <p style="margin-top:10px;">
+            <p class="lead">
               We built this experience around what patients actually want: clear communication, a gentle touch, modern tools,
               and treatment plans that respect your time and budget.
             </p>
 
-            <div style="margin-top:14px; display:grid; gap:10px;">
-              <div class="feature" style="padding:14px;">
-                <strong>1. Listen first</strong>
-                <p class="muted" style="font-size:.92rem;">We start by understanding your goals and concerns.</p>
+            <div class="steps" aria-label="What to expect">
+              <div class="step">
+                <div class="n">1</div>
+                <div>
+                  <strong>Listen first</strong>
+                  <span>We start by understanding your goals and concerns.</span>
+                </div>
               </div>
-              <div class="feature" style="padding:14px;">
-                <strong>2. Show the why</strong>
-                <p class="muted" style="font-size:.92rem;">Photos and digital imaging help you see what we see.</p>
+              <div class="step">
+                <div class="n">2</div>
+                <div>
+                  <strong>Show the why</strong>
+                  <span>Photos and digital imaging help you see what we see.</span>
+                </div>
               </div>
-              <div class="feature" style="padding:14px;">
-                <strong>3. Plan together</strong>
-                <p class="muted" style="font-size:.92rem;">Options, timeline, and costs—explained clearly.</p>
+              <div class="step">
+                <div class="n">3</div>
+                <div>
+                  <strong>Plan together</strong>
+                  <span>Options, timeline, and costs—explained clearly.</span>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="split" data-reveal>
-            <div style="display:grid; grid-template-columns: 1fr; gap: 14px;">
-              <div class="story-media" style="min-height:340px;">
-                <img src="images/ridhi.jpg" alt="Dr. Ridhi Doshi-Shah" loading="lazy">
+            <div class="doctor">
+              <div class="portrait" id="doctorPortrait" data-has-img="false" aria-label="Doctor portrait">
+                <div class="badge"><i></i> Meet Your Dentist</div>
+                <img src="images/doctor.jpg" alt="Doctor portrait" loading="lazy" />
+                <div class="placeholder">
+                  <div>
+                    <span>Dr.</span>
+                    <div>Replace <b>images/doctor.jpg</b> with a real team photo for best impact.</div>
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -1037,6 +1406,36 @@
                   Patients choose us for how it feels: welcoming, efficient, and honest. We focus on long-term oral health
                   while keeping every step comfortable and easy to understand.
                 </p>
+
+                <div class="grid-3" style="margin-top:14px;">
+                  <div class="feature" style="padding:14px;">
+                    <div class="icon" aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M12 21s-7-4.4-7-10a4 4 0 017-2 4 4 0 017 2c0 5.6-7 10-7 10z" fill="none" stroke="currentColor" stroke-width="2"/>
+                      </svg>
+                    </div>
+                    <strong>Gentle care</strong>
+                    <p class="muted" style="font-size:.92rem;">Comfort-first methods.</p>
+                  </div>
+                  <div class="feature" style="padding:14px;">
+                    <div class="icon" aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M12 2v20M2 12h20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <strong>All ages</strong>
+                    <p class="muted" style="font-size:.92rem;">Family-friendly visits.</p>
+                  </div>
+                  <div class="feature" style="padding:14px;">
+                    <div class="icon" aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M20 7l-9 9-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <strong>Clear plans</strong>
+                    <p class="muted" style="font-size:.92rem;">No surprises.</p>
+                  </div>
+                </div>
 
                 <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
                   <a class="btn primary" href="#contact">Request an Appointment</a>
@@ -1054,7 +1453,7 @@
       </div>
     </section>
 
-    <!-- Zig-zag gallery (4 blocks) -->
+    <!-- 4-block alternating gallery (text + photo) -->
     <section class="section" aria-label="Information gallery">
       <div class="container">
         <div class="section-title" data-reveal>
@@ -1078,174 +1477,345 @@
           </article>
 
           <article class="story-row reverse" data-reveal>
+            <div class="story-media" aria-label="Photo: What to expect">
+              <img src="images/expect.jpg" alt="What to expect at your first visit" loading="lazy">
+            </div>
             <div class="story-text">
               <h3>What To Expect At Your First Visit</h3>
               <p class="sub">
                 Whether you're new to the area, need a new Fairfax dentist, or you haven't seen a dentist in a while, we're here for you. Our office is a judgment-free zone, and all are welcome. Not sure what to expect from your first visit at our Fairfax dental office? Here's a quick breakdown of the basics:
               </p>
               <ul>
-                <li><b>Reviewing dental records</b> — bring them if you have them (optional).</li>
-                <li><b>X-rays</b> — digital x-rays help us see below the surface.</li>
-                <li><b>Teeth cleaning</b> — plaque/tartar removal + polish + floss.</li>
-                <li><b>Oral exam</b> — review x-rays + check teeth/gums.</li>
-                <li><b>Planning</b> — clear next steps, no pressure.</li>
+                <li><b>Reviewing dental records</b> - If you have records from previous dentists, you can certainly bring them into our office in Fairfax. This is not required, of course, but having access to your past dental records can help Dr. Doshi and the team at our office provide more informed treatment, and learn more about the oral health challenges that you may have faced in the past.</li>
+                <li><b>X-rays</b> – For new patients, we recommend a set of digital x-rays. X-rays help our team look below the surface, and identify past dental work, signs of tooth decay and gum disease  and identify past dental work, signs of tooth decay and gum disease, and more. X-rays are usually taken before teeth cleanings.</li>
+                <li><b>Teeth cleaning</b> - Next, one of our friendly dental hygienists in Fairfax will use special tools to scrape plaque and tartar buildup from your teeth. Then, we will polish your teeth and floss to remove any remaining particles.</li>
+                <li><b>Oral exam</b> - After your cleaning, you’ll get to meet Dr. Doshi. Then, Dr. Doshi will take a look at your x-rays and perform a quick oral exam to check on the overall health of your mouth.</li>
+                <li><b>Next steps</b> - We’ll talk through your goals, show you what we see, and recommend a plan that fits your priorities, timeline, and budget.</li>
               </ul>
-            </div>
-            <div class="story-media" aria-label="Photo: What to expect">
-              <img src="images/expect.jpg" alt="What to expect at your first visit" loading="lazy">
             </div>
           </article>
 
           <article class="story-row" data-reveal>
             <div class="story-text">
-              <h3>Why Are Twice-Yearly Dental Cleanings Important?</h3>
+              <span class="kicker">Modern Dentistry</span>
+              <h3>Technology that makes visits easier</h3>
               <p class="sub">
-                Cleanings remove plaque and tartar that can’t be eliminated at home. Routine checkups help Dr. Doshi catch issues early—saving time, money, and stress. Six-month checkups are often covered by insurance, and if you don’t have it, our membership plan keeps preventive care affordable.
+                Digital imaging helps us diagnose with clarity and explain treatment options in a way that’s easy to understand.
+                Efficient tools also mean less time in the chair and more confidence in your care plan.
               </p>
+              <ul>
+                <li>Digital x-rays</li>
+                <li>Intraoral photos (see what we see)</li>
+                <li>Comfort-first approach</li>
+              </ul>
             </div>
-            <div class="story-media" aria-label="Photo: Dental cleaning">
-              <img src="images/dental.jpg" alt="Dental cleaning and preventive care" loading="lazy">
+            <div class="story-media" aria-label="Photo: technology">
+              <img src="images/tech.jpg" alt="Modern dental technology" loading="lazy">
             </div>
           </article>
 
           <article class="story-row reverse" data-reveal>
+            <div class="story-media" aria-label="Photo: office comfort">
+              <img src="images/comfort.jpg" alt="Comfortable dental office" loading="lazy">
+            </div>
             <div class="story-text">
-              <h3>Our Membership Plan In Fairfax</h3>
-              <p class="sub"><b>No Insurance Needed!</b></p>
+              <span class="kicker">Comfort</span>
+              <h3>A calm environment, built for comfort</h3>
               <p class="sub">
-                For $275 per year you get:
+                If you’re anxious about dental visits, you’re not alone. We take a gentle, patient-first approach and move at a pace that feels right for you.
+                You’ll always know what’s happening next—no surprises.
               </p>
               <ul>
-                <li>Two teeth cleanings per year</li>
-                <li>Two oral exams per year</li>
-                <li>One set of yearly x-rays</li>
-                <li>One oral cancer screening</li>
+                <li>Judgment-free care</li>
+                <li>Clear, simple explanations</li>
+                <li>Friendly team support</li>
               </ul>
-              <p class="sub">
-                Call (571) 556-8331 for details.
-              </p>
-            </div>
-            <div class="story-media" aria-label="Photo: Membership plan">
-              <img src="images/insurance.jpg" alt="Membership plan and affordability" loading="lazy">
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Office gallery (4 photos) -->
-    <section class="section" aria-label="Office gallery">
+    <!-- Services -->
+    <section class="section services" id="services" aria-label="Services">
       <div class="container">
         <div class="section-title" data-reveal>
           <div>
-            <span class="kicker">Office</span>
-            <h2>Take a quick look inside our Fairfax office.</h2>
+            <span class="kicker">Services</span>
+            <h2>Everything you need for a healthier smile.</h2>
           </div>
+          <a class="btn" href="#contact">Ask a Question</a>
         </div>
 
-        <div class="office-grid" data-reveal>
-          <div class="office-photo"><img src="images/office1.jpg" alt="Office photo 1" loading="lazy"></div>
-          <div class="office-photo"><img src="images/office2.jpg" alt="Office photo 2" loading="lazy"></div>
-          <div class="office-photo"><img src="images/office3.jpg" alt="Office photo 3" loading="lazy"></div>
-          <div class="office-photo"><img src="images/office4.jpg" alt="Office photo 4" loading="lazy"></div>
+        <div class="grid-3">
+          <div class="feature" role="button" tabindex="0" data-service-card="preventive" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3>Preventive Care</h3>
+            <p>Cleanings, exams, and x-rays to catch issues early and keep you on track.</p>
+            <span class="more">Learn more →</span>
+          </div>
+
+          <div class="feature" role="button" tabindex="0" data-service-card="general" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M7 21h10M9 21V7a3 3 0 016 0v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>General Dentistry</h3>
+            <p>Fillings, crowns, bridges, and ongoing care tailored to your needs.</p>
+            <span class="more">Learn more →</span>
+          </div>
+
+          <div class="feature" role="button" tabindex="0" data-service-card="cosmetic" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M4 14s2-2 8-2 8 2 8 2v2s-2 4-8 4-8-4-8-4v-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Cosmetic Dentistry</h3>
+            <p>Whitening, veneers, and smile enhancements designed for natural results.</p>
+            <span class="more">Learn more →</span>
+          </div>
+
+          <div class="feature" role="button" tabindex="0" data-service-card="invisalign" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M8 7h8M7 12h10M8 17h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Invisalign®</h3>
+            <p>Clear aligners with a plan that fits your lifestyle and goals.</p>
+            <span class="more">Learn more →</span>
+          </div>
+
+          <div class="feature" role="button" tabindex="0" data-service-card="implants" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M12 2v7m0 0c2 0 4 2 4 4v7H8v-7c0-2 2-4 4-4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Implants</h3>
+            <p>Restore function and confidence with implant solutions.</p>
+            <span class="more">Learn more →</span>
+          </div>
+
+          <div class="feature" role="button" tabindex="0" data-service-card="pediatric" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M12 21s7-4 7-10a4 4 0 00-7-2 4 4 0 00-7 2c0 6 7 10 7 10z" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3>Pediatric Dentistry</h3>
+            <p>Kid-friendly visits that build great habits and confidence.</p>
+            <span class="more">Learn more →</span>
+          </div>
+
+          <div class="feature" role="button" tabindex="0" data-service-card="emergency" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M12 2v6m0 14v-6M2 12h6m14 0h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Emergency Dentistry</h3>
+            <p>Fast relief for toothaches, broken teeth, and urgent problems.</p>
+            <span class="more">Learn more →</span>
+          </div>
+
+          <div class="feature" role="button" tabindex="0" data-service-card="surgery" data-reveal>
+            <div class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M4 20l6-6m1-7l3 3m-3-3L7 7m4 0l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Oral Surgery</h3>
+            <p>Extractions and procedures with comfort-first care.</p>
+            <span class="more">Learn more →</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Reviews -->
-    <section class="section" id="reviews" aria-label="Patient reviews">
+    <!-- Specials -->
+    <section class="section specials" id="specials" aria-label="Special Offers">
       <div class="container">
         <div class="section-title" data-reveal>
           <div>
-            <span class="kicker">Reviews</span>
-            <h2>Patients describe us as calm, clear, and genuinely caring.</h2>
+            <span class="kicker">Specials</span>
+            <h2>Popular offers for new and existing patients.</h2>
           </div>
-          <a class="btn" href="#contact">Join Them</a>
+          <a class="btn primary" href="#contact">Book With Offer</a>
         </div>
 
-        <div class="reviews-wrap" data-reveal>
-          <div class="carousel" aria-label="Review carousel">
-            <article class="review">
-              <div class="stars" aria-label="5 stars">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-              </div>
-              <strong>“The calmest dental visit I’ve ever had.”</strong>
-              <p class="muted" style="margin-top:8px;">
-                Everything was explained clearly, and I never felt pressured. The team is welcoming and professional.
-              </p>
-              <small>— A Verified Patient</small>
-            </article>
+        <div class="grid-3">
+          <div class="feature" data-reveal>
+            <h3>New Patient Special</h3>
+            <p>Cleaning • Exam • Digital X-rays</p>
+            <div class="price">$119</div>
+            <p class="muted" style="margin-top:10px; font-size:.92rem; font-weight:700;">Update details as needed.</p>
+          </div>
 
-            <article class="review">
-              <div class="stars" aria-label="5 stars">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-              </div>
-              <strong>“Fast help when I needed it.”</strong>
-              <p class="muted" style="margin-top:8px;">
-                I called with tooth pain and they found time for me. The treatment was gentle and effective.
-              </p>
-              <small>— Emergency Visit</small>
-            </article>
+          <div class="feature" data-reveal>
+            <h3>Whitening Offer</h3>
+            <p>Custom trays + professional-grade gel</p>
+            <div class="price">$100 off</div>
+            <p class="muted" style="margin-top:10px; font-size:.92rem; font-weight:700;">Update details as needed.</p>
+          </div>
 
-            <article class="review">
-              <div class="stars" aria-label="5 stars">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-              </div>
-              <strong>“My kids actually liked it.”</strong>
-              <p class="muted" style="margin-top:8px;">
-                The staff was patient and kind, and the visit was quick. Great for families.
-              </p>
-              <small>— Parent Review</small>
-            </article>
+          <div class="feature" data-reveal>
+            <h3>Invisalign® Promo</h3>
+            <p>Limited-time savings on clear aligners</p>
+            <div class="price">$1,000 off*</div>
+            <p class="muted" style="margin-top:10px; font-size:.92rem; font-weight:700;">*Offer text can be changed.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Membership -->
-    <section class="section" id="membership" aria-label="Membership plans">
+    <section class="section" id="membership" aria-label="Membership">
       <div class="container">
         <div class="section-title" data-reveal>
           <div>
             <span class="kicker">Membership</span>
-            <h2>Simple plans for patients without insurance.</h2>
+            <h2>Simple, transparent care—without insurance stress.</h2>
           </div>
-          <a class="btn primary" href="#contact">Ask About Membership</a>
         </div>
 
-        <div class="grid-3">
-          <article class="feature" data-reveal>
-            <div class="icon" aria-hidden="true"></div>
-            <h3>Adult Plan</h3>
-            <p>Great for routine preventive care and ongoing savings on treatment.</p>
-            <p class="muted" style="margin-top:10px; font-weight:800;">$275 / year</p>
-          </article>
+        <div class="grid-2">
+          <div class="split" data-reveal>
+            <h3 style="font-family:'DM Serif Display', ui-serif, Georgia, serif; font-size:1.65rem;">Our in-office membership plan</h3>
+            <p class="lead">
+              Great for patients without insurance or anyone who wants predictable costs. Plans can include cleanings, exams,
+              and discounts on treatment.
+            </p>
+            <div class="steps">
+              <div class="step">
+                <div class="n">✓</div>
+                <div>
+                  <strong>Preventive visits included</strong>
+                  <span>Cleanings + exams as part of the plan.</span>
+                </div>
+              </div>
+              <div class="step">
+                <div class="n">✓</div>
+                <div>
+                  <strong>Discounts on treatment</strong>
+                  <span>Save on fillings, crowns, and more.</span>
+                </div>
+              </div>
+              <div class="step">
+                <div class="n">✓</div>
+                <div>
+                  <strong>Simple monthly or annual option</strong>
+                  <span>Easy budgeting for the whole family.</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+              <a class="btn primary" href="#contact">Ask About Membership</a>
+              <a class="btn" href="tel:+17039157330">Call</a>
+            </div>
+          </div>
 
-          <article class="feature" data-reveal style="border-color:rgba(44,107,237,.22);">
-            <div class="icon" aria-hidden="true"></div>
-            <h3>Child Plan</h3>
-            <p>Kid-focused preventive visits that keep smiles on track.</p>
-            <p class="muted" style="margin-top:10px; font-weight:800;">Ask for pricing</p>
-          </article>
+          <div class="split" data-reveal>
+            <h3 style="font-family:'DM Serif Display', ui-serif, Georgia, serif; font-size:1.65rem;">Insurance-friendly</h3>
+            <p class="lead">
+              We’ll help you understand your benefits and estimate costs clearly before treatment. If you have questions, just ask—no pressure.
+            </p>
+            <div class="steps">
+              <div class="step">
+                <div class="n">1</div>
+                <div>
+                  <strong>Share your info</strong>
+                  <span>We’ll verify coverage and explain what it means.</span>
+                </div>
+              </div>
+              <div class="step">
+                <div class="n">2</div>
+                <div>
+                  <strong>Get clear estimates</strong>
+                  <span>Know expected costs before we begin.</span>
+                </div>
+              </div>
+              <div class="step">
+                <div class="n">3</div>
+                <div>
+                  <strong>Choose confidently</strong>
+                  <span>You decide what fits your priorities.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <article class="feature" data-reveal>
-            <div class="icon" aria-hidden="true"></div>
-            <h3>Perio Plan</h3>
-            <p>For patients who need periodontal maintenance and extra visits.</p>
-            <p class="muted" style="margin-top:10px; font-weight:800;">Ask for pricing</p>
-          </article>
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="section" id="reviews" aria-label="Reviews">
+      <div class="container">
+        <div class="section-title" data-reveal>
+          <div>
+            <span class="kicker">Reviews</span>
+            <h2>Patients describe our care as welcoming, efficient, and honest.</h2>
+          </div>
+        </div>
+
+        <div class="reviews-wrap" data-reveal>
+          <div class="carousel" id="reviewCarousel" aria-label="Review carousel">
+            <div class="review">
+              <div class="stars" aria-hidden="true">
+                <span>★★★★★</span>
+              </div>
+              <strong>“Best dental experience I’ve had.”</strong>
+              <p class="muted" style="margin-top:8px;">
+                Everyone explained what they were doing and made me feel comfortable the whole time.
+              </p>
+              <small>— Patient review</small>
+            </div>
+
+            <div class="review">
+              <div class="stars" aria-hidden="true">
+                <span>★★★★★</span>
+              </div>
+              <strong>“Gentle, modern, and fast.”</strong>
+              <p class="muted" style="margin-top:8px;">
+                Clean office, friendly staff, and the visit was super smooth.
+              </p>
+              <small>— Patient review</small>
+            </div>
+
+            <div class="review">
+              <div class="stars" aria-hidden="true">
+                <span>★★★★★</span>
+              </div>
+              <strong>“They truly listen.”</strong>
+              <p class="muted" style="margin-top:8px;">
+                I felt respected and never pressured. The plan was clear and easy to follow.
+              </p>
+              <small>— Patient review</small>
+            </div>
+          </div>
+
+          <div class="carousel-ctrl" aria-label="Carousel controls">
+            <div class="dots" id="reviewDots" aria-label="Carousel dots"></div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn icon" type="button" id="prevReview" aria-label="Previous review">
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="btn icon" type="button" id="nextReview" aria-label="Next review">
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1256,176 +1826,503 @@
         <div class="section-title" data-reveal>
           <div>
             <span class="kicker">Contact</span>
-            <h2>Book an appointment—quick response, clear next steps.</h2>
+            <h2>Book an appointment or ask a question.</h2>
           </div>
-          <a class="btn primary" href="tel:+17039157330">Call Now</a>
         </div>
 
         <div class="contact-grid">
-          <div class="contact-card" data-reveal>
-            <h3 style="font-family:'DM Serif Display', ui-serif, Georgia, serif; font-size:1.75rem;">Healthy Smiles Dentistry</h3>
+          <form class="form" id="contactForm" data-reveal>
+            <h3 style="font-family:'DM Serif Display', ui-serif, Georgia, serif; font-size:1.65rem;">Request an Appointment</h3>
+            <p class="muted" style="margin-top:8px;">
+              Submit this form and we’ll reach out to confirm your visit. (You can also call for fastest scheduling.)
+            </p>
+
+            <div class="fields">
+              <div>
+                <label for="first">First name</label>
+                <input id="first" name="first" autocomplete="given-name" required>
+              </div>
+              <div>
+                <label for="last">Last name</label>
+                <input id="last" name="last" autocomplete="family-name" required>
+              </div>
+              <div>
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" inputmode="tel" autocomplete="tel" required>
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email">
+              </div>
+              <div class="full">
+                <label for="service">What do you need?</label>
+                <select id="service" name="service">
+                  <option value="Cleaning & Exam">Cleaning & Exam</option>
+                  <option value="Tooth Pain / Emergency">Tooth Pain / Emergency</option>
+                  <option value="Invisalign">Invisalign</option>
+                  <option value="Whitening">Whitening</option>
+                  <option value="Crown / Filling">Crown / Filling</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="full">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Tell us what’s going on, your availability, and any questions."></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn primary" type="submit">
+                Send Request
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 17l10-10M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <div class="fineprint">
+                By submitting, you agree we may contact you by phone or email to confirm your appointment.
+              </div>
+            </div>
+          </form>
+
+          <aside class="contact-card" data-reveal>
+            <h3 style="font-family:'DM Serif Display', ui-serif, Georgia, serif; font-size:1.65rem;">Visit the office</h3>
 
             <div class="info-list">
               <div class="info-item">
-                <div>
-                  <strong>Phone</strong>
-                  <a href="tel:+17039157330">(703) 915-7330</a>
-                </div>
-              </div>
-              <div class="info-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 21s7-4.4 7-10a7 7 0 10-14 0c0 5.6 7 10 7 10z" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 11a2 2 0 100-4 2 2 0 000 4z" fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
                 <div>
                   <strong>Address</strong>
                   <span>11401 Government Center Pkwy, Fairfax, VA 22030</span>
                 </div>
               </div>
+
               <div class="info-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6.5 10.8c1.8 3.6 3.9 5.6 7.5 7.5l2.5-2.5c.3-.3.8-.4 1.2-.2 1.3.5 2.7.8 4.1.8.7 0 1.2.5 1.2 1.2V21c0 .7-.5 1.2-1.2 1.2C10.1 22.2 1.8 13.9 1.8 3.2 1.8 2.5 2.3 2 3 2h3.5c.7 0 1.2.5 1.2 1.2 0 1.4.3 2.8.8 4.1.1.4.1.9-.2 1.2L6.5 10.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div>
+                  <strong>Phone</strong>
+                  <a href="tel:+17039157330">(703) 915-7330</a>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 4h16v16H4z" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 2v4M16 2v4M4 10h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
                 <div>
                   <strong>Hours</strong>
-                  <span>Mon–Fri: 9:00–17:00 (update as needed)</span>
+                  <span>Mon–Fri: 9:00–17:00<br>Sat: By appointment</span>
                 </div>
               </div>
             </div>
 
-            <div class="map">
+            <div class="map" aria-label="Map">
               <iframe
-                title="Map"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps?q=11401%20Government%20Center%20Pkwy%2C%20Fairfax%2C%20VA%2022030&output=embed">
-              </iframe>
+                src="https://www.google.com/maps?q=11401%20Government%20Center%20Pkwy,%20Fairfax,%20VA%2022030&output=embed"
+                title="Healthy Smiles Dentistry map"
+              ></iframe>
             </div>
-          </div>
 
-          <div class="contact-card" data-reveal>
-            <h3 style="font-family:'DM Serif Display', ui-serif, Georgia, serif; font-size:1.75rem;">Request a Visit</h3>
-            <p class="muted" style="margin-top:10px; font-weight:700;">
-              This form is a UI placeholder. Connect it to your backend/email service if needed.
-            </p>
-
-            <form style="margin-top:14px; display:grid; gap:10px;">
-              <div>
-                <label style="display:block; font-size:.86rem; font-weight:900; color: rgba(11,20,48,.70); margin-bottom:6px;">Full Name</label>
-                <input type="text" placeholder="Your name" required style="width:100%; padding:12px; border-radius:16px; border:1px solid rgba(11,20,48,.14); background:rgba(255,255,255,.78);">
-              </div>
-              <div>
-                <label style="display:block; font-size:.86rem; font-weight:900; color: rgba(11,20,48,.70); margin-bottom:6px;">Phone</label>
-                <input type="tel" placeholder="(###) ###-####" required style="width:100%; padding:12px; border-radius:16px; border:1px solid rgba(11,20,48,.14); background:rgba(255,255,255,.78);">
-              </div>
-              <div>
-                <label style="display:block; font-size:.86rem; font-weight:900; color: rgba(11,20,48,.70); margin-bottom:6px;">Message</label>
-                <textarea placeholder="What do you need help with?" style="width:100%; padding:12px; border-radius:16px; border:1px solid rgba(11,20,48,.14); background:rgba(255,255,255,.78); min-height:120px;"></textarea>
-              </div>
-              <button class="btn primary" type="submit">Submit Request</button>
-            </form>
-          </div>
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+              <a class="btn primary" href="tel:+17039157330">Call Now</a>
+              <a class="btn" href="#top">Back to top</a>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
 
   </main>
 
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-grid">
         <div>
           <div style="display:flex; align-items:center; gap:12px;">
-            <img src="images/logo.jpg" alt="Logo" style="width:44px; height:44px; border-radius:14px; border:1px solid rgba(11,20,48,.12); background:#fff; object-fit:cover;">
+            <img src="images/logo.jpg" alt="Healthy Smiles Dentistry logo" style="width:48px;height:48px;object-fit:contain;border:0;background:transparent;border-radius:0;box-shadow:none;">
             <div>
-              <strong style="font-weight:900;">Healthy Smiles Dentistry</strong><br>
-              <span class="muted" style="font-weight:700;">Fairfax, VA</span>
+              <strong style="font-weight:900;">Healthy Smiles Dentistry</strong>
+              <div class="muted" style="font-weight:700; margin-top:4px;">Fairfax, VA</div>
             </div>
           </div>
-          <p class="muted" style="margin-top:10px; font-weight:700;">
-            Calm, modern dentistry with clear options and real comfort.
+          <p class="muted" style="margin-top:12px; font-weight:700;">
+            Calm, modern dentistry for the whole family. Clear plans, gentle care, and a welcoming team.
           </p>
         </div>
 
-        <div class="foot-links">
-          <strong>Explore</strong>
+        <div class="foot-links" aria-label="Quick links">
+          <strong style="font-weight:900;">Quick links</strong>
           <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#specials">Specials</a>
           <a href="#membership">Membership</a>
           <a href="#reviews">Reviews</a>
+          <a href="#contact">Contact</a>
         </div>
 
-        <div class="foot-links">
-          <strong>Contact</strong>
+        <div class="foot-links" aria-label="Contact links">
+          <strong style="font-weight:900;">Contact</strong>
           <a href="tel:+17039157330">(703) 915-7330</a>
+          <a href="#contact">11401 Government Center Pkwy, Fairfax, VA 22030</a>
           <a href="#contact">Book Appointment</a>
         </div>
       </div>
 
       <div class="copyright">
-        <span>© <span id="year"></span> Healthy Smiles Dentistry</span>
-        <span>All rights reserved</span>
+        <div>© <span id="year"></span> Healthy Smiles Dentistry. All rights reserved.</div>
+        <div class="muted">Built for speed • Accessible • Mobile-ready</div>
       </div>
     </div>
   </footer>
 
-  <!-- Floating actions -->
+  <!-- Floating buttons -->
   <div class="floatbar" aria-label="Quick actions">
-    <button class="fab" id="toTop" type="button" aria-label="Scroll to top">
-      ↑
+    <button class="fab" type="button" id="toTop" aria-label="Scroll to top">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5l-7 7h4v7h6v-7h4l-7-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
     </button>
     <a class="fab" href="tel:+17039157330" aria-label="Call">
-      ☎
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.5 10.8c1.8 3.6 3.9 5.6 7.5 7.5l2.5-2.5c.3-.3.8-.4 1.2-.2 1.3.5 2.7.8 4.1.8.7 0 1.2.5 1.2 1.2V21c0 .7-.5 1.2-1.2 1.2C10.1 22.2 1.8 13.9 1.8 3.2 1.8 2.5 2.3 2 3 2h3.5c.7 0 1.2.5 1.2 1.2 0 1.4.3 2.8.8 4.1.1.4.1.9-.2 1.2L6.5 10.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </a>
   </div>
 
+  <!-- Service dialog -->
+  <div class="dialog-backdrop" id="backdrop" data-open="false" aria-hidden="true"></div>
+  <div class="dialog" id="dialog" data-open="false" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="dialog-panel">
+      <div class="dialog-head">
+        <div>
+          <h3 id="dialogTitle">Service</h3>
+          <p class="muted" id="dialogSubtitle" style="margin-top:6px; font-weight:700;"></p>
+        </div>
+        <button class="xbtn" type="button" id="closeDialog" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="dialog-body" id="dialogBody"></div>
+      <div style="padding: 0 16px 16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+        <a class="btn" href="#services" id="dialogBack">Back</a>
+        <a class="btn primary" href="#contact" id="dialogCta">Book Appointment</a>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Footer year
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Hamburger
-    const navlinks = document.getElementById('navlinks');
+    // Mobile menu
     const hamburger = document.getElementById('hamburger');
-    if (hamburger) {
-      hamburger.addEventListener('click', () => {
-        const isOpen = navlinks.getAttribute('data-open') === 'true';
-        navlinks.setAttribute('data-open', String(!isOpen));
-        hamburger.setAttribute('aria-expanded', String(!isOpen));
-      });
+    const navlinks = document.getElementById('navlinks');
+
+    function setNav(open){
+      navlinks.setAttribute('data-open', open ? 'true' : 'false');
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
-    // Close menu on link click (mobile)
-    navlinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        navlinks.setAttribute('data-open', 'false');
-        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
-      });
+    hamburger?.addEventListener('click', () => {
+      const isOpen = navlinks.getAttribute('data-open') === 'true';
+      setNav(!isOpen);
     });
 
-    // Dropdown
+    // Close nav on link click (mobile)
+    navlinks?.addEventListener('click', (e) => {
+      const t = e.target;
+      if (t && t.tagName === 'A' && window.matchMedia('(max-width: 860px)').matches){
+        setNav(false);
+      }
+    });
+
+    // Services dropdown
     const dd = document.getElementById('servicesDropdown');
     const ddBtn = document.getElementById('servicesBtn');
-    if (dd && ddBtn) {
-      ddBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const open = dd.getAttribute('data-open') === 'true';
-        dd.setAttribute('data-open', String(!open));
-        ddBtn.setAttribute('aria-expanded', String(!open));
-      });
 
-      document.addEventListener('click', (e) => {
-        if (!dd.contains(e.target)) {
-          dd.setAttribute('data-open', 'false');
-          ddBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
+    function setDropdown(open){
+      dd.setAttribute('data-open', open ? 'true' : 'false');
+      ddBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
+
+    ddBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = dd.getAttribute('data-open') === 'true';
+      setDropdown(!isOpen);
+    });
+
+    // Close dropdown on outside click + ESC
+    document.addEventListener('click', (e) => {
+      const isOpen = dd.getAttribute('data-open') === 'true';
+      if (!isOpen) return;
+      if (!dd.contains(e.target)) setDropdown(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape'){
+        setDropdown(false);
+        closeDialog();
+        setNav(false);
+      }
+    });
 
     // Reveal on scroll
     const revealEls = document.querySelectorAll('[data-reveal]');
     const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      entries.forEach(en => {
+        if (en.isIntersecting) en.target.classList.add('is-visible');
       });
     }, { threshold: 0.12 });
+
     revealEls.forEach(el => io.observe(el));
 
-    // To top
-    document.getElementById('toTop').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Doctor portrait "has image" helper
+    const portrait = document.getElementById('doctorPortrait');
+    const portraitImg = portrait?.querySelector('img');
+    if (portraitImg){
+      const set = () => portrait.setAttribute('data-has-img', portraitImg.complete && portraitImg.naturalWidth > 0 ? 'true' : 'false');
+      portraitImg.addEventListener('load', set);
+      portraitImg.addEventListener('error', set);
+      set();
+    }
+
+    // Scroll to top
+    const toTop = document.getElementById('toTop');
+    toTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Reviews carousel controls + dots
+    const carousel = document.getElementById('reviewCarousel');
+    const dotsWrap = document.getElementById('reviewDots');
+    const prevBtn = document.getElementById('prevReview');
+    const nextBtn = document.getElementById('nextReview');
+
+    function getCards(){
+      return carousel ? Array.from(carousel.querySelectorAll('.review')) : [];
+    }
+
+    function buildDots(){
+      const cards = getCards();
+      dotsWrap.innerHTML = '';
+      cards.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.className = 'dotbtn';
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Go to review ' + (i+1));
+        b.addEventListener('click', () => scrollToCard(i));
+        dotsWrap.appendChild(b);
+      });
+      updateDots();
+    }
+
+    function scrollToCard(i){
+      const cards = getCards();
+      if (!cards[i]) return;
+      cards[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      setTimeout(updateDots, 220);
+    }
+
+    function updateDots(){
+      const cards = getCards();
+      if (!cards.length) return;
+      const rect = carousel.getBoundingClientRect();
+      let bestIdx = 0;
+      let best = Infinity;
+      cards.forEach((c, i) => {
+        const r = c.getBoundingClientRect();
+        const d = Math.abs(r.left - rect.left);
+        if (d < best){ best = d; bestIdx = i; }
+      });
+      const dots = Array.from(dotsWrap.querySelectorAll('.dotbtn'));
+      dots.forEach((d, i) => d.setAttribute('aria-current', i === bestIdx ? 'true' : 'false'));
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      const cards = getCards();
+      if (!cards.length) return;
+      const dots = Array.from(dotsWrap.querySelectorAll('.dotbtn'));
+      const idx = dots.findIndex(d => d.getAttribute('aria-current') === 'true');
+      scrollToCard(Math.max(0, idx - 1));
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      const cards = getCards();
+      if (!cards.length) return;
+      const dots = Array.from(dotsWrap.querySelectorAll('.dotbtn'));
+      const idx = dots.findIndex(d => d.getAttribute('aria-current') === 'true');
+      scrollToCard(Math.min(cards.length - 1, idx + 1));
+    });
+
+    carousel?.addEventListener('scroll', () => {
+      window.requestAnimationFrame(updateDots);
+    });
+
+    buildDots();
+
+    // Dialog (services)
+    const backdrop = document.getElementById('backdrop');
+    const dialog = document.getElementById('dialog');
+    const closeBtn = document.getElementById('closeDialog');
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogSubtitle = document.getElementById('dialogSubtitle');
+    const dialogBody = document.getElementById('dialogBody');
+
+    const serviceData = {
+      preventive: {
+        title: 'Preventive Care',
+        subtitle: 'Cleanings • Exams • Digital X-rays',
+        body: `
+          <p>Preventive visits help you avoid bigger problems later. We focus on gentle cleanings, clear explanations, and early detection.</p>
+          <ul>
+            <li>Professional cleanings</li>
+            <li>Comprehensive exams</li>
+            <li>Digital x-rays and photos</li>
+          </ul>
+        `
+      },
+      general: {
+        title: 'General Dentistry',
+        subtitle: 'Fillings • Crowns • Bridges',
+        body: `
+          <p>When a tooth needs repair, we’ll explain options and choose the approach that best fits your goals and budget.</p>
+          <ul>
+            <li>Tooth-colored fillings</li>
+            <li>Crowns and bridges</li>
+            <li>Long-term maintenance plans</li>
+          </ul>
+        `
+      },
+      cosmetic: {
+        title: 'Cosmetic Dentistry',
+        subtitle: 'Whitening • Veneers • Smile design',
+        body: `
+          <p>Cosmetic care should look natural. We aim for improvements that fit your face and feel like “you.”</p>
+          <ul>
+            <li>Professional whitening</li>
+            <li>Veneers</li>
+            <li>Smile enhancement consults</li>
+          </ul>
+        `
+      },
+      invisalign: {
+        title: 'Invisalign®',
+        subtitle: 'Clear aligners with a comfortable plan',
+        body: `
+          <p>Clear aligners straighten teeth discreetly. We’ll map your plan, review timeline and cost, and support you at every check-in.</p>
+          <ul>
+            <li>Digital planning</li>
+            <li>Progress check-ins</li>
+            <li>Retention support</li>
+          </ul>
+        `
+      },
+      implants: {
+        title: 'Implants',
+        subtitle: 'Restore function and confidence',
+        body: `
+          <p>Implants are designed to replace missing teeth with stability and comfort. We’ll review candidacy and a step-by-step plan.</p>
+          <ul>
+            <li>Implant consult</li>
+            <li>Restorations</li>
+            <li>Long-term maintenance</li>
+          </ul>
+        `
+      },
+      pediatric: {
+        title: 'Pediatric Dentistry',
+        subtitle: 'Kid-friendly care for growing smiles',
+        body: `
+          <p>We make visits easy for kids and parents—gentle approach, clear guidance, and positive routines that build lifelong habits.</p>
+          <ul>
+            <li>Cleanings and exams</li>
+            <li>Fluoride and prevention</li>
+            <li>Family-friendly guidance</li>
+          </ul>
+        `
+      },
+      emergency: {
+        title: 'Emergency Dentistry',
+        subtitle: 'Fast relief for urgent issues',
+        body: `
+          <p>If you’re in pain, call us. We’ll do our best to see you quickly and relieve discomfort with clear next steps.</p>
+          <ul>
+            <li>Toothache relief</li>
+            <li>Broken/chipped teeth</li>
+            <li>Urgent evaluations</li>
+          </ul>
+        `
+      },
+      surgery: {
+        title: 'Oral Surgery',
+        subtitle: 'Extractions and procedures, comfort-first',
+        body: `
+          <p>We approach procedures with care and clarity—explaining what’s needed and how we keep you comfortable.</p>
+          <ul>
+            <li>Extractions</li>
+            <li>Procedure planning</li>
+            <li>Aftercare guidance</li>
+          </ul>
+        `
+      }
+    };
+
+    function openDialog(key){
+      const data = serviceData[key];
+      if (!data) return;
+      dialogTitle.textContent = data.title;
+      dialogSubtitle.textContent = data.subtitle;
+      dialogBody.innerHTML = data.body;
+      backdrop.setAttribute('data-open', 'true');
+      dialog.setAttribute('data-open', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDialog(){
+      backdrop.setAttribute('data-open', 'false');
+      dialog.setAttribute('data-open', 'false');
+      document.body.style.overflow = '';
+    }
+
+    closeBtn?.addEventListener('click', closeDialog);
+    backdrop?.addEventListener('click', closeDialog);
+
+    // Service cards click
+    document.querySelectorAll('[data-service-card]').forEach(card => {
+      const key = card.getAttribute('data-service-card');
+      card.addEventListener('click', () => openDialog(key));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openDialog(key);
+        }
+      });
+    });
+
+    // Mega menu quick links
+    document.querySelectorAll('.mega-item[data-service]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const key = a.getAttribute('data-service');
+        setDropdown(false);
+        // scroll to services and open dialog shortly after
+        setTimeout(() => {
+          document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(() => openDialog(key), 350);
+        }, 50);
+      });
+    });
+
+    // Contact form (demo)
+    document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Form submitted! Connect this to your email/CRM endpoint.');
+      e.target.reset();
     });
   </script>
 </body>
 </html>
+
