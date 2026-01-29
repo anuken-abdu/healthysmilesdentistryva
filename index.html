@@ -156,10 +156,10 @@
     .brand .logo{
       width: 44px; height: 44px;
       border-radius: 14px;
-      border: 0;                 /* CHANGED: remove рамку */
-      background: transparent;    /* CHANGED: remove фон */
+      border: 0;
+      background: transparent;
       object-fit: cover;
-      box-shadow: none;          /* CHANGED: remove тень */
+      box-shadow: none;
     }
     .brand .name{
       display:flex; flex-direction: column;
@@ -302,7 +302,7 @@
       margin-top: 4px;
     }
 
-    /* HERO (ТОЛЬКО ВИДЕО + ЛОГО) */
+    /* HERO (ВИДЕО + ЛОГО) */
     .hero{
       position: relative;
       height: 100svh;
@@ -311,12 +311,25 @@
       overflow: hidden;
       border-bottom: 1px solid rgba(11,20,48,.08);
     }
-    .hero video{
+
+    /* NEW: два слоя видео — фон (размытый cover) + основное (contain) */
+    .hero .hero-bg-video,
+    .hero .hero-main-video{
       position:absolute; inset: 0;
       width:100%; height:100%;
-      object-fit: contain; /* видео видно полностью */
       background: #0b1430;
+      pointer-events: none;
     }
+    .hero .hero-bg-video{
+      object-fit: cover;
+      filter: blur(18px) brightness(.92) saturate(1.08);
+      transform: scale(1.06);
+      opacity: .55;
+    }
+    .hero .hero-main-video{
+      object-fit: contain; /* полный обзор, без увеличения */
+    }
+
     .hero-center-logo{
       position:absolute;
       left:50%;
@@ -540,8 +553,8 @@
       overflow:hidden;
       box-shadow: 0 22px 70px rgba(10,25,55,.16);
       position: relative;
-      aspect-ratio: 3 / 4;      /* ВЕРТИКАЛЬНО */
-      min-height: 420px;        /* “на полный обзор” */
+      aspect-ratio: 3 / 4;
+      min-height: 420px;
     }
     .story-media img{
       position:absolute; inset:0;
@@ -723,13 +736,11 @@
       .strip{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid-3{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-      /* ВОТ ЭТОГО НЕ ХВАТАЛО — теперь About станет 1 колонкой */
       .grid-2{ grid-template-columns: 1fr; }
 
       .contact-grid{ grid-template-columns: 1fr; }
       .footer-grid{ grid-template-columns: 1fr; }
 
-      /* Зиг-заг на мобилке: вертикально + фото на “полный обзор” */
       .story-row{
         grid-template-columns: 1fr;
         padding: 16px;
@@ -772,7 +783,6 @@
       }
       .mega{ grid-template-columns: 1fr; }
 
-      /* CHANGED: чтобы пункты Services не слипались на мобилке */
       .mega-right{ grid-template-columns: 1fr; }
       .mega-item{
         flex-direction: column;
@@ -785,8 +795,14 @@
         line-height: 1.35;
       }
 
-      /* CHANGED: убрать “воздух” вокруг видео на телефоне */
-      .hero video{ object-fit: cover; }
+      /* NEW: на мобилке hero меньше, а видео остаётся "полный обзор" */
+      .hero{
+        height: 72svh;
+        min-height: 440px;
+      }
+
+      /* ВАЖНО: НЕ cover — чтобы не было увеличения/кропа */
+      .hero .hero-main-video{ object-fit: contain; }
 
       .hamburger{ display:inline-flex; }
       .cta .btn.soft{ display:none; }
@@ -801,6 +817,12 @@
 
       .office-grid{ grid-template-columns: 1fr; }
       .hero-center-logo img{ width: 150px; border-radius: 22px; }
+
+      /* ещё чуть меньше по высоте на очень маленьких экранах */
+      .hero{
+        height: 66svh;
+        min-height: 420px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -882,9 +904,15 @@
     </div>
   </header>
 
-  <!-- HERO: только видео + логотип -->
+  <!-- HERO: видео + логотип -->
   <section class="hero" aria-label="Hero video">
-    <video autoplay muted loop playsinline preload="metadata" poster="images/logo.jpg">
+    <!-- Фоновый слой (убирает пустоты, но не увеличивает основное видео) -->
+    <video class="hero-bg-video" autoplay muted loop playsinline preload="metadata" poster="images/logo.jpg" aria-hidden="true">
+      <source src="videos/hero.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Основное видео (полный обзор) -->
+    <video class="hero-main-video" autoplay muted loop playsinline preload="metadata" poster="images/logo.jpg">
       <source src="videos/hero.mp4" type="video/mp4" />
     </video>
 
@@ -893,7 +921,7 @@
     </div>
   </section>
 
-  <!-- Контент, который раньше был поверх видео — теперь СРАЗУ НИЖЕ -->
+  <!-- Контент ниже -->
   <section class="section" aria-label="Intro content">
     <div class="container">
       <div class="hero-grid">
@@ -1218,10 +1246,6 @@
                 <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
                 <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
                 <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
                 <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l2.2 6.3H21l-5 3.7 1.9 6.2-5-3.8-5 3.8L9.8 13 4.8 9.3h6.8L12 3z" fill="currentColor"/></svg>
               </div>
               <strong>“My kids actually liked it.”</strong>
@@ -1450,4 +1474,3 @@
   </script>
 </body>
 </html>
-
