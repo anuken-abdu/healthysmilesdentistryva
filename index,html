@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Healthy Smiles Dentistry - Профессиональная стоматология. Лечение, имплантация, эстетика.">
+    <title>Healthy Smiles Dentistry</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. CSS VARIABLES & RESET --- */
+        :root {
+            --primary: #0ca4a5; /* Бирюзовый (как на референсе) */
+            --primary-dark: #087f80;
+            --secondary: #2c3e50; /* Темно-синий текст */
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-gray: #555555;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- 2. HEADER --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .header__container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav__list {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav__link {
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--secondary);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav__link:hover {
+            color: var(--primary);
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .lang-btn {
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .lang-btn.active, .lang-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Burger Menu (Mobile) */
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .burger span {
+            width: 25px;
+            height: 3px;
+            background: var(--secondary);
+            transition: var(--transition);
+        }
+
+        /* --- 3. HERO SECTION (VIDEO BG) --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            margin-top: 0; /* Компенсация, если хедер не прозрачный */
+        }
+
+        .hero__video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .hero__overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Затемнение видео */
+            z-index: -1;
+        }
+
+        .hero__content {
+            max-width: 800px;
+            padding: 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero__title {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero__subtitle {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+            border-radius: 50px;
+            transition: var(--transition);
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--white);
+        }
+
+        .btn--outline {
+            background: transparent;
+            border: 2px solid var(--white);
+            margin-left: 15px;
+        }
+
+        .btn--outline:hover {
+            background: var(--white);
+            color: var(--secondary);
+        }
+
+        /* --- 4. SERVICES --- */
+        .section {
+            padding: 80px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            margin-bottom: 50px;
+        }
+
+        .services__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        /* --- 5. ABOUT --- */
+        .about {
+            background: var(--light-bg);
+        }
+
+        .about__wrapper {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about__text {
+            flex: 1;
+        }
+
+        .about__img {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        /* --- 6. CONTACT FORM --- */
+        .contact__wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .form-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .form-btn {
+            width: 100%;
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        .form-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        /* --- 7. FOOTER --- */
+        .footer {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        /* --- MOBILE ADAPTIVE --- */
+        @media (max-width: 768px) {
+            .hero__title { font-size: 32px; }
+            .about__wrapper { flex-direction: column; }
+            .nav {
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                padding: 20px;
+                box-shadow: var(--shadow);
+                display: none; /* JS будет переключать на flex */
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav.active { display: flex; }
+            .burger { display: flex; }
+            .header__actions { display: none; } /* Скрываем кнопку на мобилке в хедере */
+            .lang-switch { margin: 20px 0; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header__container">
+            <a href="#" class="logo">
+                <img src="images/logo.jpg" alt="Logo">
+                <span>Healthy Smiles</span>
+            </a>
+            
+            <nav class="nav" id="nav">
+                <ul class="nav__list">
+                    <li><a href="#services" class="nav__link" data-i18n="nav_services">Услуги</a></li>
+                    <li><a href="#about" class="nav__link" data-i18n="nav_about">О нас</a></li>
+                    <li><a href="#doctors" class="nav__link" data-i18n="nav_doctors">Врачи</a></li>
+                    <li><a href="#contact" class="nav__link" data-i18n="nav_contact">Контакты</a></li>
+                </ul>
+                <div class="lang-switch">
+                    <button class="lang-btn active" onclick="setLanguage('ru')">RU</button>
+                    <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+                </div>
+            </nav>
+
+            <button class="burger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <video autoplay muted loop playsinline class="hero__video-bg">
+            <source src="videos/hero.mp4" type="video/mp4">
+        </video>
+        <div class="hero__overlay"></div>
+
+        <div class="hero__content">
+            <h1 class="hero__title" data-i18n="hero_title">Идеальная улыбка начинается здесь</h1>
+            <p class="hero__subtitle" data-i18n="hero_subtitle">Современная стоматология с заботой о вашем комфорте и здоровье.</p>
+            <div class="hero__btns">
+                <a href="#contact" class="btn" data-i18n="btn_book">Записаться</a>
+                <a href="#services" class="btn btn--outline" data-i18n="btn_services">Узнать больше</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <div class="container">
+            <h2 class="section-title" data-i18n="services_title">Наши Услуги</h2>
+            <p class="section-subtitle" data-i18n="services_subtitle">Полный спектр стоматологических услуг для всей семьи</p>
+            
+            <div class="services__grid">
+                <div class="service-card">
+                    <div class="service-icon">🦷</div>
+                    <h3 data-i18n="serv_1_title">Терапия</h3>
+                    <p data-i18n="serv_1_desc">Лечение кариеса, каналов и реставрация зубов без боли.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">✨</div>
+                    <h3 data-i18n="serv_2_title">Invisalign</h3>
+                    <p data-i18n="serv_2_desc">Прозрачные элайнеры для выравнивания зубов. Золотой провайдер.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💎</div>
+                    <h3 data-i18n="serv_3_title">Имплантация</h3>
+                    <p data-i18n="serv_3_desc">Восстановление зубов с пожизненной гарантией.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about section">
+        <div class="container about__wrapper">
+            <div class="about__img">
+                <img src="https://placehold.co/600x400/0ca4a5/ffffff?text=Doctor+Doshi" alt="Dr. Doshi">
+            </div>
+            <div class="about__text">
+                <h2 class="section-title" style="text-align: left;" data-i18n="about_title">О докторе Доши</h2>
+                <p data-i18n="about_text">
+                    В Healthy Smiles Dentistry мы создаем атмосферу доверия. Доктор Ридхи Доши — эксперт с многолетним опытом, который превращает поход к стоматологу в приятное событие. Мы используем новейшее цифровое оборудование для точной диагностики.
+                </p>
+                <br>
+                <p><strong data-i18n="about_promo">Спецпредложение для новых пациентов: Осмотр + Чистка всего за $119!</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <div class="container contact__wrapper">
+            <div class="form-box">
+                <h2 class="section-title" data-i18n="contact_title">Записаться на прием</h2>
+                <form onsubmit="event.preventDefault(); alert('Спасибо! Мы свяжемся с вами.');">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Ваше Имя / Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-input" placeholder="Телефон / Phone" required>
+                    </div>
+                    <button type="submit" class="btn form-btn" data-i18n="btn_submit">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <h3 style="margin-bottom: 10px;">Healthy Smiles Dentistry</h3>
+            <p>Fairfax, VA | (703) 915-7330</p>
+            <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">© 2026 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. БАЗА ПЕРЕВОДОВ (Словарь)
+        const translations = {
+            ru: {
+                nav_services: "Услуги",
+                nav_about: "О нас",
+                nav_doctors: "Врачи",
+                nav_contact: "Контакты",
+                hero_title: "Идеальная улыбка начинается здесь",
+                hero_subtitle: "Современная стоматология с заботой о вашем комфорте и здоровье.",
+                btn_book: "Записаться",
+                btn_services: "Узнать больше",
+                services_title: "Наши Услуги",
+                services_subtitle: "Полный спектр стоматологических услуг для всей семьи",
+                serv_1_title: "Терапия",
+                serv_1_desc: "Лечение кариеса, каналов и реставрация зубов без боли.",
+                serv_2_title: "Invisalign",
+                serv_2_desc: "Прозрачные элайнеры для выравнивания зубов. Золотой провайдер.",
+                serv_3_title: "Имплантация",
+                serv_3_desc: "Восстановление зубов с пожизненной гарантией.",
+                about_title: "О докторе Доши",
+                about_text: "В Healthy Smiles Dentistry мы создаем атмосферу доверия. Доктор Ридхи Доши — эксперт с многолетним опытом, который превращает поход к стоматологу в приятное событие. Мы используем новейшее цифровое оборудование для точной диагностики.",
+                about_promo: "Спецпредложение для новых пациентов: Осмотр + Чистка всего за $119!",
+                contact_title: "Записаться на прием",
+                btn_submit: "Отправить"
+            },
+            en: {
+                nav_services: "Services",
+                nav_about: "About Us",
+                nav_doctors: "Doctors",
+                nav_contact: "Contact",
+                hero_title: "Your Perfect Smile Starts Here",
+                hero_subtitle: "Modern dentistry with care for your comfort and health.",
+                btn_book: "Book Appointment",
+                btn_services: "Learn More",
+                services_title: "Our Services",
+                services_subtitle: "Full range of dental services for the whole family",
+                serv_1_title: "General Dentistry",
+                serv_1_desc: "Cavity filling, root canals, and restoration without pain.",
+                serv_2_title: "Invisalign",
+                serv_2_desc: "Clear aligners for teeth straightening. Gold Provider.",
+                serv_3_title: "Implants",
+                serv_3_desc: "Tooth restoration with lifetime warranty.",
+                about_title: "Meet Dr. Doshi",
+                about_text: "At Healthy Smiles Dentistry, we create an atmosphere of trust. Dr. Ridhi Doshi is an expert with years of experience making dental visits pleasant. We use the latest digital equipment for precise diagnosis.",
+                about_promo: "New Patient Special: Exam + Cleaning for only $119!",
+                contact_title: "Book an Appointment",
+                btn_submit: "Submit"
+            }
+        };
+
+        // 2. ФУНКЦИЯ СМЕНЫ ЯЗЫКА
+        function setLanguage(lang) {
+            // Меняем активную кнопку
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            // Ищем кнопку по тексту (простой способ) или можно добавить ID, но так тоже сработает
+            const btns = document.querySelectorAll('.lang-btn');
+            if(lang === 'ru') btns[0].classList.add('active');
+            else btns[1].classList.add('active');
+
+            // Заменяем текст везде, где есть атрибут data-i18n
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // 3. МОБИЛЬНОЕ МЕНЮ
+        function toggleMenu() {
+            const nav = document.getElementById('nav');
+            nav.classList.toggle('active');
+        }
+
+        // Закрываем меню при клике на ссылку
+        document.querySelectorAll('.nav__link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('nav').classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
